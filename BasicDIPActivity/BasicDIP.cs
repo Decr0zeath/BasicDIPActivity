@@ -106,5 +106,35 @@ namespace ImageProcessingActivity
 
             return sepiaImage;
         }
+
+        public static Bitmap SubtractImage(Bitmap imageLoad, Bitmap imageBackground, int threshold)
+        {
+            Bitmap imageResult = new Bitmap(imageLoad.Width, imageLoad.Height);
+            Color myGreen = Color.FromArgb(0, 255, 0);
+            int greyGreen = (myGreen.R + myGreen.G + myGreen.B) / 3;
+
+            for (int x = 0; x < imageLoad.Width; x++)
+            {
+                for (int y = 0; y < imageLoad.Height; y++)
+                {
+                    Color pixel = imageLoad.GetPixel(x, y);
+                    Color backpixel = imageBackground.GetPixel(x, y);
+
+                    // Convert both pixels and reference green to grayscale
+                    int greyPixel = (pixel.R + pixel.G + pixel.B) / 3;
+                    int greyBack = (backpixel.R + backpixel.G + backpixel.B) / 3;
+
+                    // Compute the difference between the foreground and background
+                    int diff = Math.Abs(greyPixel - greyBack);
+                    int greenDiff = Math.Abs(greyPixel - greyGreen);
+
+                    // If the pixel is close to green OR it's similar to the background, replace it
+                    if (greenDiff < threshold || diff < threshold) imageResult.SetPixel(x, y, backpixel);
+                    else imageResult.SetPixel(x, y, pixel);
+                }
+            }
+
+            return imageResult;
+        }
     }
 }

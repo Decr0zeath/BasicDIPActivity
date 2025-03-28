@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BasicDIPActivity;
+using System;
 using System.Drawing;
 
 namespace ImageProcessingActivity
@@ -135,6 +136,40 @@ namespace ImageProcessingActivity
             }
 
             return imageResult;
+        }
+
+        public static Bitmap ConvolutionFilter(Bitmap sourceBitmap, ConvMatrix matrix)
+        {
+            Bitmap resultBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height);
+
+            for (int y = 1; y < sourceBitmap.Height - 1; y++)
+            {
+                for (int x = 1; x < sourceBitmap.Width - 1; x++)
+                {
+                    int red = 0, green = 0, blue = 0;
+
+                    for (int filterY = -1; filterY <= 1; filterY++)
+                    {
+                        for (int filterX = -1; filterX <= 1; filterX++)
+                        {
+                            Color pixel = sourceBitmap.GetPixel(x + filterX, y + filterY);
+                            int weight = matrix.Matrix[filterY + 1, filterX + 1];
+
+                            red += pixel.R * weight;
+                            green += pixel.G * weight;
+                            blue += pixel.B * weight;
+                        }
+                    }
+
+                    red = Math.Min(Math.Max((red / matrix.Factor) + matrix.Offset, 0), 255);
+                    green = Math.Min(Math.Max((green / matrix.Factor) + matrix.Offset, 0), 255);
+                    blue = Math.Min(Math.Max((blue / matrix.Factor) + matrix.Offset, 0), 255);
+
+                    resultBitmap.SetPixel(x, y, Color.FromArgb(red, green, blue));
+                }
+            }
+
+            return resultBitmap;
         }
     }
 }

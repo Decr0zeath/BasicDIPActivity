@@ -1,13 +1,7 @@
 ﻿using ImageProcessingActivity;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlTypes;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BasicDIPActivity
@@ -79,7 +73,7 @@ namespace BasicDIPActivity
         }
 
         
-        //Open and Save Dialogs
+        // Open and Save Dialogs & Button Clicks
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
@@ -128,7 +122,7 @@ namespace BasicDIPActivity
         }
 
         
-        // DIP Menu Strip - Part 1
+        // Part 1 -- Basic DIP process
         private void imageCopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             processedImage = new Bitmap(originalImage.Width, originalImage.Height);
@@ -164,12 +158,83 @@ namespace BasicDIPActivity
             pictureBoxProcessed.Image = processedImage;
         }
 
-        // Subtract -- Part 2
+        // Part 2 -- Image Subtraction
         private void imageButtonSubtract_Click(object sender, EventArgs e)
         {
             int threshold = sliderThreshold.Value; // Get the threshold from UI slider
             imageResult = BasicDIP.SubtractImage(imageLoad, imageBackground, threshold);
             pictureBoxSubtract.Image = imageResult;
+        }
+
+        // Part 3 -- Convolution Process
+        private void smoothingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.Smooth);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void gaussianBlurToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.GaussianBlur);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void sharpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.Sharpen);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void meanRemovalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.MeanRemoval);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void embossLaplascianToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.EmbossLaplacian);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void horzVertToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.HorzVert);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void allDirectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.AllDirection);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void lossyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.Lossy);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void horizontalOnlyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.HorzOnly);
+            pictureBoxProcessed.Image = processedImage;
+        }
+
+        private void verticalOnlyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processedImage = new Bitmap(originalImage.Width, originalImage.Height);
+            processedImage = BasicDIP.ConvolutionFilter(originalImage, Filters.VertOnly);
+            pictureBoxProcessed.Image = processedImage;
         }
     }
 }
